@@ -5,7 +5,10 @@ metadata:
     app: bgd
   name: bgd
   namespace: bgd
+  annotations:
+    link.argocd.argoproj.io/external-link: http://bgd-bgd.apps-crc.testing
 spec:
+  host: bgd-bgd.apps-crc.testing
   port:
     targetPort: 8080
   to:
