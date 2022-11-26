@@ -7,7 +7,9 @@ metadata:
   namespace: todo
   annotations:
     argocd.argoproj.io/sync-wave: "3"
+    link.argocd.argoproj.io/external-link: "http://todo-todo.apps-crc.testing/todo.html"
 spec:
+  host: todo-todo.apps-crc.testing
   port:
     targetPort: 8080
   to:
