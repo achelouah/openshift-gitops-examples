@@ -12,7 +12,7 @@ patchesJson6902:
       group: apps
       kind: Deployment
       name: bgd
-      namespace: application-1-dev
+      namespace: bgd-dev
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
@@ -20,11 +20,11 @@ patchesJson6902:
   - target:
       kind: Route
       name: bgd
-      namespace: application-1-dev
+      namespace: bgd-dev
     patch: |-
       - op: replace
         path: /spec/host
-        value: bgd-application-1-dev.apps-crc.testing
+        value: bgd-bgd-dev.apps-crc.testing
       - op: replace
         path: /metadata/annotations/link.argocd.argoproj.io~1external-link
-        value: http://bgd-application-1-dev.apps-crc.testing
+        value: http://bgd-bgd-dev.apps-crc.testing
