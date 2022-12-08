@@ -1,0 +1,87 @@
+# RBAC Permission Structure
+# Breaking down the permissions definition differs slightly between
+# applications and every other resource type in Argo CD.
+# 
+# All resources except application-specific permissions (see next bullet):
+# 
+# p, <role/user/group>, <resource>, <action>, <object>
+# 
+# Applications, logs, and exec (which belong to an AppProject):
+# 
+# p, <role/user/group>, <resource>, <action>, <appproject>/<object>
+# 
+# RBAC Resources and Actions
+# Resources: clusters, projects, applications, repositories, certificates, accounts, gpgkeys, logs, exec
+# 
+# Actions: get, create, update, delete, sync, override, action/<group/kind/action-name>
+# 
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: dev
+  namespace: openshift-gitops
+spec:
+  description: Development GitOps Project
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceBlacklist:
+    - group: '*'
+      kind: NetworkPolicy
+    - group: '*'
+      kind: ResourceQuota
+    - group: '*'
+      kind: LimitRange
+  sourceRepos:
+    - 'https://github.com/achelouah/openshift-gitops-examples'
+  destinations:
+    - name: in-cluster
+      namespace: bgd-dev
+      server: 'https://kubernetes.default.svc'
+  roles:
+    - description: Role for developement deployment
+      groups:
+        - appproject-dev
+      name: development-rollout
+      policies:
+        - >-
+          p, proj:dev:development-rollout, applications, get,
+          dev/*, allow
+        - >-
+          p, proj:dev:development-rollout, applications, create,
+          dev/*, allow
+        - >-
+          p, proj:dev:development-rollout, applications, update,
+          dev/*, allow
+        - >-
+          p, proj:dev:development-rollout, applications, delete,
+          dev/*, allow
+        - >-
+          p, proj:dev:development-rollout, applications, sync,
+          dev/*, allow
+        - >-
+          p, proj:dev:development-rollout, applications, override,
+          dev/*, allow
+    - description: Role to audit development deployment by Ops
+      groups:
+        - appproject-prod
+      name: ops-audit
+      policies:
+        - >-
+          p, proj:dev:ops-audit, applications, get,
+          dev/*, allow
+        - >-
+          p, proj:dev:ops-audit, applications, create,
+          dev/*, deny
+        - >-
+          p, proj:dev:ops-audit, applications, update,
+          dev/*, deny
+        - >-
+          p, proj:dev:ops-audit, applications, delete,
+          dev/*, deny
+        - >-
+          p, proj:dev:ops-audit, applications, sync,
+          dev/*, deny
+        - >-
+          p, proj:dev:ops-audit, applications, override,
+          dev/*, deny

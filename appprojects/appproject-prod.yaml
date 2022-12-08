@@ -1,0 +1,64 @@
+# RBAC Permission Structure
+# Breaking down the permissions definition differs slightly between
+# applications and every other resource type in Argo CD.
+#
+# All resources except application-specific permissions (see next bullet):
+#
+# p, <role/user/group>, <resource>, <action>, <object>
+#
+# Applications, logs, and exec (which belong to an AppProject):
+#
+# p, <role/user/group>, <resource>, <action>, <appproject>/<object>
+#
+# RBAC Resources and Actions
+# Resources: clusters, projects, applications, repositories, certificates, accounts, gpgkeys, logs, exec
+#
+# Actions: get, create, update, delete, sync, override, action/<group/kind/action-name>
+#
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: prod
+  namespace: openshift-gitops
+spec:
+  description: Production GitOps Project
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceBlacklist:
+    - group: '*'
+      kind: NetworkPolicy
+    - group: '*'
+      kind: ResourceQuota
+    - group: '*'
+      kind: LimitRange
+  sourceRepos:
+    - 'https://github.com/achelouah/openshift-gitops-examples'
+  destinations:
+    - name: in-cluster
+      namespace: bgd-prod
+      server: 'https://kubernetes.default.svc'
+  roles:
+    - description: Role for production deployment
+      groups:
+        - appproject-prod
+      name: production-rollout
+      policies:
+        - >-
+          p, proj:prod:production-rollout, applications, get,
+          prod/*, allow
+        - >-
+          p, proj:prod:production-rollout, applications, create,
+          prod/*, allow
+        - >-
+          p, proj:prod:production-rollout, applications, update,
+          prod/*, allow
+        - >-
+          p, proj:prod:production-rollout, applications, delete,
+          prod/*, allow
+        - >-
+          p, proj:prod:production-rollout, applications, sync,
+          prod/*, allow
+        - >-
+          p, proj:prod:production-rollout, applications, override,
+          prod/*, allow

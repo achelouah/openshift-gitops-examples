@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bgd-prod
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: bgd-prod
+    server: https://kubernetes.default.svc
+  project: prod
+  source:
+    path: apps/bgd/overlays/prod
+    repoURL: https://github.com/achelouah/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
