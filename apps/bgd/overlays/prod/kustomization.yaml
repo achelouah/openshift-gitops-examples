@@ -3,7 +3,7 @@
 #   "foo/bar~": "baz" } you’d use the pointer /foo~1bar~0.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: application-1-prod
+namespace: bgd-prod
 resources:
 - ../../base
 patchesJson6902:
@@ -20,11 +20,11 @@ patchesJson6902:
   - target:
       kind: Route
       name: bgd
-      namespace: application-1-prod
+      namespace: bgd-prod
     patch: |-
       - op: replace
         path: /spec/host
-        value: bgd-application-1-prod.apps-crc.testing
+        value: bgd-bgd-prod.apps-crc.testing
       - op: replace
         path: /metadata/annotations/link.argocd.argoproj.io~1external-link
-        value: http://bgd-application-1-prod.apps-crc.testing
+        value: http://bgd-bgd-prod.apps-crc.testing
