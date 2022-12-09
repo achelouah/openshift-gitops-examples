@@ -12,7 +12,7 @@ patchesJson6902:
       group: apps
       kind: Deployment
       name: bgd
-      namespace: application-1-prod
+      namespace: bgd-prod
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
