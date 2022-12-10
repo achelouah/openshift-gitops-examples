@@ -1,0 +1,32 @@
+namespace: nginx-dev
+
+resources:
+  - ../../base
+
+crds:
+- openshift-deploymentconfig.json
+
+configMapGenerator:                                                                                                                                                                    
+  - name: nginx-conf
+    files:
+    - nginx.conf
+
+patches:
+- target:
+    group: route.openshift.io
+    version: v1
+    kind: Route
+    name: nginx-noroot
+  patch: |-
+    - op: replace
+      path: /spec/host
+      value: nginx-noroot-dev.apps-crc.testing
+- target:
+    group: apps.openshift.io
+    version: v1
+    kind: DeploymentConfig
+    name: nginx-noroot
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/image
+      value: docker.io/achelouah/nginx-noroot:1.22.1

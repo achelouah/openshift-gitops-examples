@@ -1,0 +1,49 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nginx-noroot
+  name: nginx-noroot
+spec:
+  replicas: 1
+  selector:
+    app: nginx-noroot
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: nginx-noroot
+      name: nginx-noroot
+    spec:
+      containers:
+      - env: []
+        image: dune.registry.arrakis.kc:8443/ach/nginx-noroot:1.22.1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 3
+        name: nginx-noroot
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 3
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: 512Mi
+        volumeMounts:
+          - name: nginx-conf-volume
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes: 
+        - name: nginx-conf-volume
+          configMap:
+            name: nginx-conf
+  triggers:
+  - type: ConfigChange
