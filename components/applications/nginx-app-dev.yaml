@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-dev
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: nginx-dev
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/nginx/overlays/dev
+    repoURL: https://github.com/achelouah/openshift-gitops-examples
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: false
