@@ -3,6 +3,8 @@ kind: Route
 metadata:
   labels:
     app: nginx-noroot
+  annotations:
+    link.argocd.argoproj.io/external-link: http://nginx-noroot.apps-crc.testing
   name: nginx-noroot
 spec:
   host: "nginx-noroot.apps-crc.testing"

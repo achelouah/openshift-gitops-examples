@@ -21,6 +21,9 @@ patches:
     - op: replace
       path: /spec/host
       value: nginx-noroot-dev.apps-crc.testing
+    - op: replace
+      path: /metadata/annotations/link.argocd.argoproj.io~1external-link
+      value: http://nginx-noroot-dev.apps-crc.testing
 - target:
     group: apps.openshift.io
     version: v1
