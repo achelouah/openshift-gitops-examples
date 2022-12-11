@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    description: Exposes and load balances the application pods
+  name: nginx-noroot
   labels:
     app: nginx-noroot
-  name: nginx-noroot
+  annotations:
+    description: Exposes and load balances the application pods
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   ports:
   - name: web
