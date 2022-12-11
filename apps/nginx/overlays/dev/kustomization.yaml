@@ -10,6 +10,13 @@ configMapGenerator:
   - name: nginx-conf
     files:
     - nginx.conf
+  - name: nginx-index
+    files:
+    - index.html
+
+generatorOptions:
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 
 patches:
 - target:
