@@ -57,7 +57,7 @@ tolerations: []
 
 affinity: {}
 
-indexMessage: "Hello World from Dev Environment"
+indexMessage: "Hello World from Dev Environment @ ACME Corp"
 
 namespace: nginx-dev
 
