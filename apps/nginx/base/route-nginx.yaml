@@ -5,6 +5,7 @@ metadata:
     app: nginx-noroot
   annotations:
     link.argocd.argoproj.io/external-link: http://nginx-noroot.apps-crc.testing
+    argocd.argoproj.io/sync-wave: "2"
   name: nginx-noroot
 spec:
   host: "nginx-noroot.apps-crc.testing"
